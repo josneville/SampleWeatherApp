@@ -1,0 +1,38 @@
+<div class="full-container" style="padding: 20px" layout-gt-sm="row" layout="column">
+  <div layout="column" style="margin: 10px; background-color: white; padding: 20px" class="third-box md-whiteframe-z4">
+    <md-input-container>
+      <label>Search</label>
+      <input type="text" ng-model="query" ng-enter="search()" required>
+    </md-input-container>
+    <div layout="row" style="margin-top: 10px">
+      <div layout="column" layout-align="center center">
+        <h6 style="margin-top: 0">Desired Temperature</h6>
+        <div layout="row" style="margin-top: -10px">
+          <md-input-container>
+            <label>Min</label>
+            <input type="number" ng-model="desired_temperature.min" required>
+          </md-input-container>
+          <md-input-container>
+            <label>Max</label>
+            <input type="number" ng-model="desired_temperature.max" required>
+          </md-input-container>
+        </div>
+      </div>
+      <md-button class="md-primary md-raised" ng-click="search()">Search</md-button>
+    </div>
+    <div layout="column" style="width: 100%; margin-top: 20px">
+      <div ng-show="searched && search_results" ng-repeat="result in search_results.list" layout="row">
+        <div layout="column">
+          <h3 style="margin: 0; padding: 0">{{result.name}}</h3>
+          <p style="font-size: 9px; color: grey; padding: 0; margin: 0; margin-top: 5px">Min: {{result.main.temp_min}} Max: {{result.main.temp_max}}</p>
+          <p style="font-size: 9px; color: grey; padding: 0; margin: 0; margin-top: 5px">Country: {{result.sys.country}}</p>
+        </div>
+      </div>
+      <div ng-show="!search_results && searched">
+        <h3>No Search Results Found</h3>
+      </div>
+    </div>
+  </div>
+  <div layout="column" style="margin: 10px; background-color: white; padding: 20px" class="two-third-box md-whiteframe-z4">
+  </div>
+</div>

@@ -13,12 +13,12 @@ module.exports = {
   cities: {
     add: (req, res, next) => {
       var user = req.user
-      user.cities.push(req.params.city_id)
+      user.cities.push(req.body)
       user.save(() => res.status(200).send()).catch(next)
     },
     remove: (req, res, next) => {
       var user = req.user
-      user.cities.pull(req.params.city_id)
+      user.cities.id(req.params.city_id).remove()
       user.save(() => res.status(200).send()).catch(next)
     }
   }

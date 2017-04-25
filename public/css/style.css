@@ -1,0 +1,47 @@
+body {
+  background-color: #95a5a6
+}
+
+.full-container {
+  width: 100%;
+  height: 100%;
+}
+
+.three-quarters-box {
+  width: 75%;
+}
+
+.two-third-box {
+    width: 67%;
+}
+
+.half-box {
+    width: 50%;
+}
+
+.third-box {
+    width: 33%;
+}
+
+.quarter-box {
+  width: 25%;
+}
+
+md-input-container {
+  margin: 0
+}
+
+.md-errors-spacer {
+  height: 0 !important;
+  min-height: 0 !important;
+}
+
+
+@media all and (max-width: 959px) {
+    .xxs-box, .xs-box, .sm-box, .quarter-box, .third-box, .med-box, .half-box, .two-third-box, .three-quarters-box, .large-box {
+        width: 100%;
+    }
+    .small-90 {
+      width: 90%;
+    }
+}
