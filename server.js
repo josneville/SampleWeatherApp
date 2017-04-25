@@ -1,5 +1,5 @@
 var express = require('express')
-var multer = require('multer')
+var morgan = require('morgan')
 var bodyParser = require('body-parser')
 var mongoose = require('mongoose')
 var passport = require('passport')
@@ -7,8 +7,9 @@ var passport = require('passport')
 var config = require('./config')
 
 mongoose.connect(config.mongo)
+app = express()
 
-app.use(multer('dev')) // Middleware to track all requests
+app.use(morgan('dev')) // Middleware to track all requests
 app.use(bodyParser.json()) // Middleware to parse json objects
 app.use(bodyParser.urlencoded({extended: true})) // Middleware to parse urls using `qs` library
 
