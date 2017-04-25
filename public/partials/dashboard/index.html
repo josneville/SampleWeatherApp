@@ -1,38 +1,72 @@
-<div class="full-container" style="padding: 20px" layout-gt-sm="row" layout="column">
-  <div layout="column" style="margin: 10px; background-color: white; padding: 20px" class="third-box md-whiteframe-z4">
-    <md-input-container>
-      <label>Search</label>
-      <input type="text" ng-model="query" ng-enter="search()" required>
-    </md-input-container>
-    <div layout="row" style="margin-top: 10px">
-      <div layout="column" layout-align="center center">
-        <h6 style="margin-top: 0">Desired Temperature</h6>
-        <div layout="row" style="margin-top: -10px">
-          <md-input-container>
-            <label>Min</label>
-            <input type="number" ng-model="desired_temperature.min" required>
-          </md-input-container>
-          <md-input-container>
-            <label>Max</label>
-            <input type="number" ng-model="desired_temperature.max" required>
-          </md-input-container>
+<div class="full-container" layout-gt-sm="row" layout="column">
+  <div layout="column" style="padding: 10px;" class="third-box">
+    <div ng-form="search_form" style="width: 100%; height: 100%; background-color: white; padding: 20px" class="md-whiteframe-z4" layout="column" layout-align="start center">
+      <md-input-container style="width: 100%">
+        <label>Search</label>
+        <input type="text" name="searchc" ng-model="query" ng-enter="search()" required>
+      </md-input-container>
+      <div  layout="row" style="margin-top: 10px">
+        <div layout="column" layout-align="center center">
+          <h6 style="margin-top: 0">Desired Temperature</h6>
+          <div layout="row" style="margin-top: -10px">
+            <md-input-container>
+              <label>Min</label>
+              <input type="number" name="min" ng-max="desired_temperature.max" ng-model="desired_temperature.min" required>
+            </md-input-container>
+            <md-input-container>
+              <label>Max</label>
+              <input type="number" name="max" ng-min="desired_temperature.min" ng-model="desired_temperature.max" required>
+            </md-input-container>
+          </div>
         </div>
+        <md-button class="md-primary md-raised" ng-disabled="search_form.$invalid" ng-click="search()">Search</md-button>
       </div>
-      <md-button class="md-primary md-raised" ng-click="search()">Search</md-button>
-    </div>
-    <div layout="column" style="width: 100%; margin-top: 20px">
-      <div ng-show="searched && search_results" ng-repeat="result in search_results.list" layout="row">
-        <div layout="column">
-          <h3 style="margin: 0; padding: 0">{{result.name}}</h3>
-          <p style="font-size: 9px; color: grey; padding: 0; margin: 0; margin-top: 5px">Min: {{result.main.temp_min}} Max: {{result.main.temp_max}}</p>
-          <p style="font-size: 9px; color: grey; padding: 0; margin: 0; margin-top: 5px">Country: {{result.sys.country}}</p>
+      <div layout="column" style="width: 100%;">
+        <div ng-show="searched && search_results.list" ng-repeat="result in search_results.list">
+          <div layout="row" style="width: 100%; margin-top: 20px">
+            <md-icon md-svg-src="plus" style="margin: 0; cursor: pointer" class="md-raised md-primary" ng-click="add_city(result.id)"></md-icon>
+            <div layout="column">
+              <h3 style="margin: 0; padding: 0">{{result.name}}</h3>
+              <p style="font-size: 9px; color: grey; padding: 0; margin: 0; margin-top: 5px">Min: {{result.main.temp_min}}F Max: {{result.main.temp_max}}F</p>
+              <p style="font-size: 9px; color: grey; padding: 0; margin: 0; margin-top: 5px">Country: {{result.sys.country}}</p>
+            </div>
+          </div>
         </div>
-      </div>
-      <div ng-show="!search_results && searched">
-        <h3>No Search Results Found</h3>
+        <div ng-show="(search_results.list.length == 0) && searched">
+          <h3>No Search Results Found</h3>
+        </div>
       </div>
     </div>
   </div>
-  <div layout="column" style="margin: 10px; background-color: white; padding: 20px" class="two-third-box md-whiteframe-z4">
+  <div ng-show="labels.length > 0" layout="column" style="padding: 10px;" class="two-third-box">
+    <div style="width: 100%; height: 100%; background-color: white; padding: 20px" class="md-whiteframe-z4" layout="column" layout-align="start center">
+      <h2>User's Cities</h2>
+      <canvas id="line" class="chart chart-bar" chart-data="data" chart-labels="labels" chart-series="series" chart-dataset-override="datasetOverride" chart-options="options"></canvas>
+      <div layout="column" style="width: 100%">
+        <p style="font-size: 9px; color: grey">* Bold mean within desired temperature range</p>
+        <md-table-container style="width: 100%">
+          <table md-table>
+            <thead md-head>
+              <tr md-row>
+                <th md-column><span>Name</span></th>
+                <th md-column><span>Country</span></th>
+                <th md-column md-numeric><span>Min Desired Temperature</span></th>
+                <th md-column md-numeric><span>Max Desired Temperature</span></th>
+                <th md-column md-numeric></th>
+              </tr>
+            </thead>
+            <tbody md-body>
+              <tr md-row ng-repeat="city_info in user.cities | orderBy:'-within_range'">
+                <td md-cell ng-style="{'font-weight': city_info.within_range ? 'bold' : 'normal'}">{{city_info.city.name}}</td>
+                <td md-cell ng-style="{'font-weight': city_info.within_range ? 'bold' : 'normal'}">{{city_info.city.sys.country}}</td>
+                <td md-cell ng-style="{'font-weight': city_info.within_range ? 'bold' : 'normal'}">{{city_info.desired_temperature.min | number: 0}}&deg;F</td>
+                <td md-cell ng-style="{'font-weight': city_info.within_range ? 'bold' : 'normal'}">{{city_info.desired_temperature.max | number: 0}}&deg;F</td>
+                <td md-cell><md-button class="md-primary" ng-click="remove_city(city_info._id)">Remove</md-button></td>
+              </tr>
+            </tbody>
+          </table>
+        </md-table-container>
+      </div>
+    </div>
   </div>
 </div>

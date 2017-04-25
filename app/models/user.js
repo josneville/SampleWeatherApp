@@ -1,11 +1,12 @@
+var config = require('../../config')
+
 var mongoose = require('mongoose')
 var Schema = mongoose.Schema
 var bcrypt = require('bcrypt')
-
 var Promise = require('bluebird')
 mongoose.Promise = Promise
 
-var weather_api = Promise.promisifyAll(require('openweathermap'))
+var FavCity = require('./fav_city')
 
 var UserSchema = new Schema({
   email: {
@@ -18,45 +19,12 @@ var UserSchema = new Schema({
     required: true
   },
   cities: {
-    type: [{
-      city_id: {type: String, required: true},
-      desired_temperature: {
-        min: {type: Number, required: true},
-        max: {type: Number, required: true}
-      }
-    }],
-    default: []
+    type: [FavCity.schema]
   }
 }, {
   timestamps: {
     createdAt: 'created_at',
     updatedAt: 'updated_at'
-  },
-  toObject: {
-    transform: function (doc, ret) {
-      Promise.map(ret.cities, favorite_city => {
-        weather_api.nowAsync({id: favorite_city.city_id, APPID: config.weather_key}).then(result => {
-          favorite_city.city = result
-          return Promise.resolve(undefined)
-        })
-      })
-      .then(() => {
-        return ret
-      })
-    }
-  },
-  toJSON: {
-    transform: function (doc, ret) {
-      Promise.map(ret.cities, favorite_city => {
-        weather_api.nowAsync({id: favorite_city.city_id, APPID: config.weather_key}).then(result => {
-          favorite_city.city = result
-          return Promise.resolve(undefined)
-        })
-      })
-      .then(() => {
-        return ret
-      })
-    }
   }
 })
 
