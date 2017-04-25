@@ -43,6 +43,15 @@ module.exports = {
         }
       }).then(() => res.status(200).send())
     },
+    update: (req, res, next) => {
+      var user = req.user
+      User.update({
+        _id: user.id,
+        'cities._id': req.params.city_id
+      }, {
+        $set: {'cities.$': req.body}
+      }).then(() => res.status(200).send())
+    },
     remove: (req, res, next) => {
       var user = req.user
       User.update({

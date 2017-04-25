@@ -41,6 +41,13 @@ angular.module('WeatherApp.Factory', [])
             method: 'DELETE',
             url: '/api/users/cities/' + city_id
           })
+        },
+        update: function(form){
+          return $http({
+            method: 'PUT',
+            url: '/api/users/cities/' + form._id,
+            data: form
+          })
         }
       }
     }

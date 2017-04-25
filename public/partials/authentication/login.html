@@ -10,5 +10,7 @@
       <input type="password" ng-model="login_form.password" required>
     </md-input-container>
     <md-button class="md-raised md-primary" ng-disabled="loginForm.$invalid" ng-click="login()">Login</md-button>
+    <br>
+    <a ui-sref="authentication.register" style="font-size: 12px">Don't have an account? Register here.</a>
   </md-card-content>
 </md-card>

@@ -12,6 +12,7 @@ module.exports = function(app, passport){
   app.delete('/api/users/auth', middleware.auth.isLoggedIn, controllers.users.logout)
 
   app.post('/api/users/cities', middleware.auth.isLoggedIn, controllers.users.cities.add)
+  app.put('/api/users/cities/:city_id', middleware.auth.isLoggedIn, controllers.users.cities.update)
   app.delete('/api/users/cities/:city_id', middleware.auth.isLoggedIn, controllers.users.cities.remove)
 
   app.get('/api/weather', middleware.auth.isLoggedIn, controllers.weather.find)

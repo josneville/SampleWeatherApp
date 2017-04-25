@@ -1,0 +1,14 @@
+<md-card class="third-box small-90" style="padding: 20px; margin: 10px !important" ng-form="registerForm" ng-submit="login()">
+  <md-card-content layout="column" layout-align="space-between center">
+    <h2>Sample Weather App</h2>
+    <md-input-container style="width: 100%; margin-top: 20px">
+      <label>Email</label>
+      <input type="email" ng-model="register_form.email" required>
+    </md-input-container>
+    <md-input-container style="width: 100%; margin-top: 20px">
+      <label>Password</label>
+      <input type="password" ng-model="register_form.password" required>
+    </md-input-container>
+    <md-button class="md-raised md-primary" ng-disabled="registerForm.$invalid" ng-click="register()">Register</md-button>
+  </md-card-content>
+</md-card>

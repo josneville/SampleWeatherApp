@@ -13,6 +13,7 @@ angular.module('WeatherApp.Controllers', [])
     }
     $scope.register = function() {
       UserAPI.create($scope.register_form).success(function() {
+          window.alert('Registration successful')
           $state.go('authentication.login')
         })
         .error(function() {
@@ -41,7 +42,6 @@ angular.module('WeatherApp.Controllers', [])
         })
     }
     $scope.getUser()
-
 
     $scope.searched = false
 
@@ -107,7 +107,6 @@ angular.module('WeatherApp.Controllers', [])
           fill: false,
           steppedLine: true,
           lineTension: 0,
-          hoverBorderColor: "rgba(255,99,132,1)",
           type: 'bar'
         },
         {
@@ -116,7 +115,6 @@ angular.module('WeatherApp.Controllers', [])
           fill: false,
           steppedLine: true,
           lineTension: 0,
-          hoverBorderColor: "rgba(0,99,132,1)",
           type: 'bar'
         }
       ];
@@ -133,4 +131,21 @@ angular.module('WeatherApp.Controllers', [])
       }
     }
 
+    $scope.logout = function(){
+      UserAPI.logout().then(function(){
+        $state.go('authentication.login')
+      })
+    }
+
+  })
+  .controller('DashCtrl.CityCtrl', function($scope, UserAPI){
+    $scope.editing = false
+    $scope.edit = function(){
+      $scope.editing = true
+    }
+    $scope.save = function() {
+      UserAPI.cities.update($scope.city_info).success(function(){
+        $scope.editing = false
+      })
+    }
   })
